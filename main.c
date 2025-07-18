@@ -19,17 +19,23 @@ int main(int argc, char** argv) {
         dup2(pipe_fd[1], PIPE_WRITE_FILENO);
         close(pipe_fd[1]);
 
-        //execv(argv[1], NULL);
+        char cwd[512];
+        getcwd(cwd, sizeof(cwd));
+        char ld_preload_hook_path[640];
+        snprintf(ld_preload_hook_path, sizeof(ld_preload_hook_path), "%s/../hooks/libhooks.so", cwd);
+        setenv("LD_PRELOAD", ld_preload_hook_path, 1);
+        setenv("M3D_PIPE_WRITE_FILENO", "100", 1);
+        execv(argv[1], &argv[1]);
 
-        for (int i = 0; i < 11; i++) {
-            char message[64];
-            snprintf(message, sizeof(message), "this is message %d\n", i);
-            write(PIPE_WRITE_FILENO, message, strlen(message));
-        }
+        // for (int i = 0; i < 11; i++) {
+        //     char message[64];
+        //     snprintf(message, sizeof(message), "this is message %d\n", i);
+        //     write(PIPE_WRITE_FILENO, message, strlen(message));
+        // }
 
-        const char* done = "leaving child process";
-        write(STDOUT_FILENO, done, strlen(done));
-        close(PIPE_WRITE_FILENO);
+        // const char* done = "leaving child process";
+        // write(STDOUT_FILENO, done, strlen(done));
+        // close(PIPE_WRITE_FILENO);
     }
     else {        
         close(pipe_fd[1]);

@@ -1,0 +1,3 @@
+- use cmake to compiled shared library instead of bash script
+- add input args checking/parsing if necessary
+- add writes to mem_hooks to write to known pipe file descriptor
