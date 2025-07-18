@@ -6,6 +6,7 @@
 #include <string.h>
 
 #define PIPE_WRITE_FILENO 100
+#define ALLOC_DESCRIPTOR_STRLEN 88
 
 int main(int argc, char** argv) {
     int pipe_fd[2];
@@ -40,9 +41,11 @@ int main(int argc, char** argv) {
     else {        
         close(pipe_fd[1]);
 
-        char buf[512];
+        char buf[ALLOC_DESCRIPTOR_STRLEN];
         ssize_t bytes_read;
+
         while ((bytes_read = read(pipe_fd[0], buf, sizeof(buf))) > 0) {
+            // need to loop read until we've definitely read the message size
             write(STDOUT_FILENO, buf, bytes_read);
         }
 

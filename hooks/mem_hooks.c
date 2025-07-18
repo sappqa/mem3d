@@ -3,6 +3,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <string.h>
+#include <time.h>
+
+#define ALLOC_DESCRIPTOR_STRLEN 88
 
 /*
 TODO:
@@ -39,19 +43,28 @@ rendering solution 2
 
 */
 
-
-
 void* malloc(size_t size) {
     static void* (*orig_malloc)(size_t) = NULL;
     if (!orig_malloc) {
         orig_malloc = dlsym(RTLD_NEXT, "malloc");
     }
 
+    struct timespec ts;
+    clock_gettime(CLOCK_REALTIME, &ts);
     void* ptr = orig_malloc(size);
 
-    char msg_buf[128];
-    int len = snprintf(msg_buf, sizeof(msg_buf), "malloc'd %zu bytes @ %p\n", size, ptr);
-    if (len) write(STDOUT_FILENO, msg_buf, len);
+    char msg_buf[ALLOC_DESCRIPTOR_STRLEN];
+    int len = snprintf(msg_buf, ALLOC_DESCRIPTOR_STRLEN, "alloc_type:A,size:%010zu,address:%p,timestamp:%010ld.%09ld\n", size, ptr, ts.tv_sec, ts.tv_nsec);
+
+    char* fdstr = getenv("M3D_PIPE_WRITE_FILENO");
+    if (!fdstr) {
+        char* err_msg = "error: Mem3d pipe write-end file descriptor not found.\n";
+        write(STDERR_FILENO, err_msg, strlen(err_msg));
+    }
+    int write_fd = atoi(fdstr);
+
+    if (len) write(write_fd, msg_buf, len);
+    //write(STDOUT_FILENO, msg_buf, len);
 
     return ptr;
 }
@@ -64,7 +77,7 @@ void free(void* ptr) {
 
     orig_free(ptr);
 
-    char msg_buf[64];
-    int len = snprintf(msg_buf, sizeof(msg_buf), "freed @ %p\n", ptr);
-    if (len) write(STDOUT_FILENO, msg_buf, len);
+    // char msg_buf[64];
+    // int len = snprintf(msg_buf, sizeof(msg_buf), "freed @ %p\n", ptr);
+    // if (len) write(STDOUT_FILENO, msg_buf, len);
 }
