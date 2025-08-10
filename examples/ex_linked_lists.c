@@ -46,9 +46,10 @@ void ll_dealloc(ll_node* ll_head) {
     }
 }
 
-void main() {
+int main() {
     ll_node* list = ll_alloc(14);
     ll_print(list);
     ll_dealloc(list);
     list = NULL;
+    return 0;
 }

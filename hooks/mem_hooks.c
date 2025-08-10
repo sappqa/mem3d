@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include "../common.h"
+#include "common.h"
 
 /*
 TODO:
@@ -45,7 +45,7 @@ rendering solution 2
 int get_m3d_pipe_write_end() {
     char* fdstr = getenv(ENV_M3D_PIPE_WRITE_FILENO);
     if (!fdstr) {
-        char* err_msg = "error: Mem3d pipe write-end file descriptor not found.\n";
+        char* err_msg = "error: mem3d pipe write-end file descriptor not found.\n";
         write(STDERR_FILENO, err_msg, strlen(err_msg));
     }
     return atoi(fdstr);

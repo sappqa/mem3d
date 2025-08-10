@@ -1,0 +1,1 @@
+add_library(hooks SHARED mem_hooks.c)

@@ -21,10 +21,11 @@ int main(int argc, char** argv) {
         char cwd[512];
         getcwd(cwd, sizeof(cwd));
         char ld_preload_hook_path[640];
-        snprintf(ld_preload_hook_path, sizeof(ld_preload_hook_path), "%s/../hooks/libhooks.so", cwd);
+        int length = snprintf(ld_preload_hook_path, sizeof(ld_preload_hook_path), "%s/hooks/libhooks.so", cwd);
+
         setenv("LD_PRELOAD", ld_preload_hook_path, 1);
-        
         setenv(ENV_M3D_PIPE_WRITE_FILENO, "100", 1);
+
         execv(argv[1], &argv[1]);
     }
     else {        
@@ -34,7 +35,6 @@ int main(int argc, char** argv) {
         ssize_t bytes_read;
 
         while ((bytes_read = read(pipe_fd[0], buf, sizeof(buf))) > 0) {
-            // need to loop read until we've definitely read the message size
             write(STDOUT_FILENO, buf, bytes_read);
         }
 

@@ -1,0 +1,1 @@
+add_executable(ex_linked_lists ex_linked_lists.c)
