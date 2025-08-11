@@ -1,5 +1,6 @@
-- use cmake to compiled shared library instead of bash script
-- get cmake to compile examples/
+- add triangle boilerplate
+
+
 - update readme with build/usage instructions
 
 

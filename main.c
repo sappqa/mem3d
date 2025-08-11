@@ -5,6 +5,7 @@
 #include <sys/wait.h>
 #include <string.h>
 #include "common.h"
+#include "render.h"
 
 int main(int argc, char** argv) {
     int pipe_fd[2];
@@ -42,6 +43,8 @@ int main(int argc, char** argv) {
 
         int status;
         waitpid(pid, &status, 0);
+
+        render_window();
     }
 
     exit(0);
