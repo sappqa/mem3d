@@ -1,14 +1,15 @@
 #include "KHR/khrplatform.h"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
-#include "render.h"
+#include "render_window.h"
+#include "render_graphics.h"
 
 void _key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
-int render_window() {
+GLFWwindow* _glfw_window_init() {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -29,9 +30,17 @@ int render_window() {
         return -1;
     }
 
+    return window;
+}
+
+int render_window() {
+    GLFWwindow* window = _glfw_window_init();
+
+
     while(!glfwWindowShouldClose(window)) {
+        render_graphics();
         glfwSwapBuffers(window);
-        glfwPollEvents();    
+        glfwPollEvents();
     }
 
     glfwTerminate();
