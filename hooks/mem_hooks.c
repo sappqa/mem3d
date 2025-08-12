@@ -26,6 +26,8 @@ void log_alloc(void* ptr, size_t size) {
     write(log_fd, &evt, sizeof(evt));
 }
 
+rendering solution 0
+- for starters, we can just run through the animation from start to end without any time progress bar.
 
 rendering solution 1
 - create array of memory events: ALLOC or FREE, timestamp, ptr, size. This array must be in timestamp sequential order
