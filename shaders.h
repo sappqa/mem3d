@@ -1,1 +1,4 @@
-void shaders_init();
+#pragma once
+#include <glad/glad.h>
+
+GLuint shaders_init();

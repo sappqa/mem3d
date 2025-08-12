@@ -5,7 +5,7 @@
 #include <sys/wait.h>
 #include <string.h>
 #include "common.h"
-#include "render.h"
+#include "render_window.h"
 
 int main(int argc, char** argv) {
     int pipe_fd[2];
