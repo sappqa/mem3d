@@ -6,6 +6,7 @@
 #include <string.h>
 #include "common.h"
 #include "render_window.h"
+#include "memory_event.h"
 
 int main(int argc, char** argv) {
     int pipe_fd[2];
@@ -35,8 +36,18 @@ int main(int argc, char** argv) {
         char buf[ALLOC_DESCRIPTOR_STRLEN];
         ssize_t bytes_read;
 
+        int t = 0;
         while ((bytes_read = read(pipe_fd[0], buf, sizeof(buf))) > 0) {
-            write(STDOUT_FILENO, buf, bytes_read);
+            // write(STDOUT_FILENO, buf, bytes_read);
+            memory_event* event = (memory_event*)malloc(sizeof(memory_event));
+            parse_memory_event(buf, bytes_read, event);
+
+            printf("alloc type: %c\n", event->alloc);
+            printf("alloc address: %p\n", event->address);
+            printf("alloc timestamp: %ld.%ld\n", event->timestamp.tv_sec, event->timestamp.tv_nsec);
+            printf("alloc size: %zu\n", event->size);
+
+            free(event);
         }
 
         close(pipe_fd[0]);

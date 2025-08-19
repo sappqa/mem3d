@@ -47,7 +47,7 @@ void ll_dealloc(ll_node* ll_head) {
 }
 
 int main() {
-    ll_node* list = ll_alloc(14);
+    ll_node* list = ll_alloc(2);
     ll_print(list);
     ll_dealloc(list);
     list = NULL;

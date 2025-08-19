@@ -64,10 +64,10 @@ void* malloc(size_t size) {
     void* ptr = orig_malloc(size);
 
     char msg_buf[ALLOC_DESCRIPTOR_STRLEN];
-    int len = snprintf(msg_buf, ALLOC_DESCRIPTOR_STRLEN, "alloc_type:A,size:%010zu,address:%p,timestamp:%010ld.%09ld\n", size, ptr, ts.tv_sec, ts.tv_nsec);
+    int len = snprintf(msg_buf, ALLOC_DESCRIPTOR_STRLEN, "alloc_type:A,address:%p,timestamp:%010ld.%09ld,size:%010zu", ptr, ts.tv_sec, ts.tv_nsec, size);
 
     int write_fd = get_m3d_pipe_write_end();
-    if (len) write(write_fd, msg_buf, len);
+    if (len) write(write_fd, msg_buf, sizeof(msg_buf));
 
     return ptr;
 }
@@ -83,8 +83,8 @@ void free(void* ptr) {
     orig_free(ptr);
 
     char msg_buf[ALLOC_DESCRIPTOR_STRLEN];
-    int len = snprintf(msg_buf, ALLOC_DESCRIPTOR_STRLEN, "alloc_type:F,address:%p,timestamp:%010ld.%09ld\n", ptr, ts.tv_sec, ts.tv_nsec);
+    int len = snprintf(msg_buf, ALLOC_DESCRIPTOR_STRLEN, "alloc_type:F,address:%p,timestamp:%010ld.%09ld-----------------", ptr, ts.tv_sec, ts.tv_nsec);
 
     int write_fd = get_m3d_pipe_write_end();
-    if (len) write(write_fd, msg_buf, len);
+    if (len) write(write_fd, msg_buf, sizeof(msg_buf));
 }
