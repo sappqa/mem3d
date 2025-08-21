@@ -57,8 +57,8 @@ int main(int argc, char** argv) {
             // free(event);
         }
 
-        printf("min address %p\n", bounds.min_address);
-        printf("max address %p\n", bounds.max_address);
+        // printf("min address %p\n", bounds.min_address);
+        // printf("max address %p\n", bounds.max_address);
 
         close(pipe_fd[0]);
 
