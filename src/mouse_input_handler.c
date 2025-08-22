@@ -1,27 +1,28 @@
 #include "mouse_input_handler.h"
+#include "camera.h"
+#include <stdio.h>
 
-
-void _left_press() {
-
-}
-
-void _left_release() {
+static void _left_press() {
 
 }
 
-void _right_press() {
+static void _left_release() {
 
 }
 
-void _right_release() {
+static void _right_press() {
 
 }
 
-void _middle_press() {
+static void _right_release() {
 
 }
 
-void _middle_release() {
+static void _middle_press() {
+
+}
+
+static void _middle_release() {
 
 }
 
@@ -41,6 +42,10 @@ void handle_mouse_button_input(GLFWwindow* window, int button, int action, int m
     }
 }
 
+void handle_mouse_move_input(GLFWwindow* window, double xpos, double ypos) {
+
+}
+
 void handle_mouse_scroll_input(GLFWwindow* window, double xoffset, double yoffset) {
-    
+    camera_set_zoom(camera_get_zoom() + yoffset * .025);
 }

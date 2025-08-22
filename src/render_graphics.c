@@ -1,11 +1,8 @@
 #include "render_graphics.h"
 #include "common.h"
 #include "shaders.h"
-#include "linmath.h"
+#include "camera.h"
 #include "glad/glad.h"
-
-#include <unistd.h>
-#include <stdio.h>
 
 static GLuint _simple_shaders;
 static GLuint _vao_cube;
@@ -16,6 +13,14 @@ static GLuint _vbo_grid_vertices;
 static GLuint _vbo_grid_colors;
 static GLuint _ebo;
 static int _grid_size = 20;
+static int _u_proj_location;
+
+static void _shaders_init() {
+    _simple_shaders = shaders_init();
+    glUseProgram(_simple_shaders);
+    _u_proj_location = glGetUniformLocation(_simple_shaders, "u_proj");
+    glUseProgram(0);
+}
 
 static void _vertices_init() {
 
@@ -146,23 +151,11 @@ static void _vertices_init() {
 }
 
 static void _camera_init() {
-    // init camera to center of grid
-    vec3 eye = {10.1, -7.0, 30};
-    vec3 target = {10, 10, 0};
-    vec3 up = {0, 0, 1};
-    mat4x4 view, perspective, proj;
-    mat4x4_look_at(view, eye, target, up);
-    mat4x4_perspective(perspective, RADIANS(45.0f), RENDER_WINDOW_ASPECT, 0.01f, 100.0f);
-    mat4x4_mul(proj, perspective, view);
-
-    glUseProgram(_simple_shaders);
-    int proj_loc = glGetUniformLocation(_simple_shaders, "u_proj");
-    glUniformMatrix4fv(proj_loc, 1, 0, (GLfloat*)proj);
-    glUseProgram(0);
+    camera_init();
 }
 
 void graphics_init() {
-    _simple_shaders = shaders_init();
+    _shaders_init();
     _vertices_init();
     _camera_init();
 
@@ -177,6 +170,10 @@ void render_graphics() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(_simple_shaders);
+    mat4x4 proj;
+    camera_get_projection(proj);
+    glUniformMatrix4fv(_u_proj_location, 1, 0, (GLfloat*)proj);
+
     glBindVertexArray(_vao_cube);
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
     glBindVertexArray(_vao_grid);
