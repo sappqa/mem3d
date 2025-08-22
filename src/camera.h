@@ -10,3 +10,4 @@ void camera_set_target(vec3 target);
 void camera_get_projection(mat4x4 proj);
 float camera_get_zoom();
 void camera_set_zoom(float zoom);
+void camera_rotate(float dx, float dy);

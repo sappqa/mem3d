@@ -2,28 +2,34 @@
 #include "camera.h"
 #include <stdio.h>
 
-static void _left_press() {
+static int _left_down = 0;
+static int _right_down = 0;
+static int _middle_down = 0;
+static double _last_xpos;
+static double _last_ypos;
 
+static void _left_press() {
+    _left_down = 1;
 }
 
 static void _left_release() {
-
+    _left_down = 0;
 }
 
 static void _right_press() {
-
+    _right_down = 1;
 }
 
 static void _right_release() {
-
+    _right_down = 0;
 }
 
 static void _middle_press() {
-
+    _middle_down = 1;
 }
 
 static void _middle_release() {
-
+    _middle_down = 0;
 }
 
 void handle_mouse_button_input(GLFWwindow* window, int button, int action, int mods) {
@@ -43,7 +49,15 @@ void handle_mouse_button_input(GLFWwindow* window, int button, int action, int m
 }
 
 void handle_mouse_move_input(GLFWwindow* window, double xpos, double ypos) {
+    double dx = xpos - _last_xpos;
+    double dy = ypos - _last_ypos;
 
+    if (_left_down) {
+        camera_rotate(dx, dy);
+    }
+    
+    _last_xpos = xpos;
+    _last_ypos = ypos;
 }
 
 void handle_mouse_scroll_input(GLFWwindow* window, double xoffset, double yoffset) {
