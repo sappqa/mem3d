@@ -26,7 +26,7 @@ void camera_init() {
 }
 
 void camera_get_position(vec3 position) {
-    position = _position;
+    memcpy(position, _position, sizeof(vec3));
 }
 
 void camera_set_position(vec3 position) {
@@ -34,7 +34,7 @@ void camera_set_position(vec3 position) {
 }
 
 void camera_get_target(vec3 target) {
-    target = _target;
+    memcpy(target, _target, sizeof(vec3));
 }
 
 void camera_set_target(vec3 target) {
