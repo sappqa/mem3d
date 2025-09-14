@@ -1,7 +1,5 @@
-- memory event ingestion
-    - draw grid axes
-    - draw cubes in grid axes
-    - capture min and max ptr address and get the difference. Use that to base the size of the world space
+
+- capture min and max ptr address and get the difference. Use that to base the size of the world space
 
 
 note:

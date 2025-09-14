@@ -1,5 +1,5 @@
 #include "mouse_input_handler.h"
-#include "camera.h"
+#include "orbit_camera.h"
 #include <stdio.h>
 
 static int _left_down = 0;
@@ -53,7 +53,7 @@ void handle_mouse_move_input(GLFWwindow* window, double xpos, double ypos) {
     double dy = ypos - _last_ypos;
 
     if (_left_down) {
-        camera_rotate(dx, dy);
+        orbit_camera_rotate(dx, dy);
     }
     
     _last_xpos = xpos;
@@ -61,5 +61,5 @@ void handle_mouse_move_input(GLFWwindow* window, double xpos, double ypos) {
 }
 
 void handle_mouse_scroll_input(GLFWwindow* window, double xoffset, double yoffset) {
-    camera_set_zoom(camera_get_zoom() + yoffset * .025);
+    orbit_camera_set_distance(orbit_camera_get_distance() + yoffset * .025);
 }

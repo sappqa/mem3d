@@ -1,7 +1,7 @@
 #include "render_graphics.h"
 #include "common.h"
 #include "shaders.h"
-#include "camera.h"
+#include "orbit_camera.h"
 #include "glad/glad.h"
 
 static GLuint _simple_shaders;
@@ -25,27 +25,27 @@ static void _shaders_init() {
 static void _vertices_init() {
 
     float cube_vertices[] = {
-        0.0f, 0.0f, 0.0f,   
-        1.0f, 0.0f, 0.0f,   
-        1.0f, 1.0f, 0.0f,   
-        0.0f, 1.0f, 0.0f,   
+        -1.0f, -1.0f, -1.0f,   
+        1.0f, -1.0f, -1.0f,   
+        1.0f, 1.0f, -1.0f,   
+        -1.0f, 1.0f, -1.0f,   
 
-        0.0f, 0.0f, 1.0f,   
-        1.0f, 0.0f, 1.0f,   
+        -1.0f, -1.0f, 1.0f,   
+        1.0f, -1.0f, 1.0f,   
         1.0f, 1.0f, 1.0f,   
-        0.0f, 1.0f, 1.0f,   
+        -1.0f, 1.0f, 1.0f,   
     };
 
     float cube_colors[] = {
-        0.1f, 0.1f, 0.1f, 1.0f,
-        0.1f, 0.1f, 0.1f, 1.0f,
-        0.1f, 0.1f, 0.1f, 1.0f,
-        0.1f, 0.1f, 0.1f, 1.0f,
+        0.6f, 0.1f, 0.1f, 1.0f,
+        0.6f, 0.1f, 0.1f, 1.0f,
+        0.1f, 0.1f, 0.6f, 1.0f,
+        0.1f, 0.1f, 0.6f, 1.0f,
 
-        0.1f, 0.1f, 0.1f, 1.0f,
-        0.1f, 0.1f, 0.1f, 1.0f,
-        0.1f, 0.1f, 0.1f, 1.0f,
-        0.1f, 0.1f, 0.1f, 1.0f
+        0.1f, 0.6f, 0.1f, 1.0f,
+        0.1f, 0.6f, 0.1f, 1.0f,
+        0.6f, 0.1f, 0.6f, 1.0f,
+        0.6f, 0.1f, 0.6f, 1.0f
     };
 
     GLuint indices[] = {
@@ -73,9 +73,9 @@ static void _vertices_init() {
     int index_vertices = 0;
     int index_colors = 0;
     
-    for (int i = 0; i <= _grid_size; i++) {
+    for (int i = -_grid_size / 2; i <= _grid_size / 2; i++) {
         // horizontal line
-        grid_vertices[index_vertices++] = 0.0f;
+        grid_vertices[index_vertices++] = -_grid_size / 2;
         grid_vertices[index_vertices++] = i;
         grid_vertices[index_vertices++] = 0.0f;
 
@@ -84,7 +84,7 @@ static void _vertices_init() {
         grid_colors[index_colors++] = 0.3f;
         grid_colors[index_colors++] = 1.0f;
 
-        grid_vertices[index_vertices++] = _grid_size;
+        grid_vertices[index_vertices++] = _grid_size / 2;
         grid_vertices[index_vertices++] = i;
         grid_vertices[index_vertices++] = 0.0f;
 
@@ -92,10 +92,12 @@ static void _vertices_init() {
         grid_colors[index_colors++] = 0.3f;
         grid_colors[index_colors++] = 0.3f;
         grid_colors[index_colors++] = 1.0f;
+    }
 
-        // // vertical line
+    for (int i = -_grid_size / 2; i <= _grid_size / 2; i++) {
+        // vertical line
         grid_vertices[index_vertices++] = i;
-        grid_vertices[index_vertices++] = 0.0f;
+        grid_vertices[index_vertices++] = -_grid_size / 2;
         grid_vertices[index_vertices++] = 0.0f;
 
         grid_colors[index_colors++] = 0.3f;
@@ -104,7 +106,7 @@ static void _vertices_init() {
         grid_colors[index_colors++] = 1.0f;
 
         grid_vertices[index_vertices++] = i;
-        grid_vertices[index_vertices++] = _grid_size;
+        grid_vertices[index_vertices++] = _grid_size / 2;
         grid_vertices[index_vertices++] = 0.0f;
 
         grid_colors[index_colors++] = 0.3f;
@@ -151,7 +153,7 @@ static void _vertices_init() {
 }
 
 static void _camera_init() {
-    camera_init();
+    orbit_camera_init();
 }
 
 void graphics_init() {
@@ -171,7 +173,7 @@ void render_graphics() {
 
     glUseProgram(_simple_shaders);
     mat4x4 proj;
-    camera_get_projection(proj);
+    orbit_camera_get_projection(proj);
     glUniformMatrix4fv(_u_proj_location, 1, 0, (GLfloat*)proj);
 
     glBindVertexArray(_vao_cube);
