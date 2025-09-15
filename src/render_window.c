@@ -55,7 +55,7 @@ static GLFWwindow* _glfw_window_init() {
 int render_window(memory_event* memory_events, size_t num_memory_events, memory_event_bounds* bounds) {
     GLFWwindow* window = _glfw_window_init();
 
-    animation_timer_set_startup_delay(1);
+    animation_timer_set_startup_delay_ms(1 * 1000);
     animation_timer_set_animation_duration_ms(15 * 1000);
     
     graphics_init(memory_events, num_memory_events, bounds);

@@ -2,7 +2,7 @@
 #include "stdint.h"
 #include <time.h>
 
-void animation_timer_set_startup_delay(int seconds);
+void animation_timer_set_startup_delay_ms(uint32_t ms);
 void animation_timer_set_animation_duration_ms(uint32_t ms);
 uint32_t animation_timer_get_animation_duration_ms();
 void animation_timer_start();

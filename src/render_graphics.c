@@ -185,6 +185,10 @@ static void _animation_init() {
         double progress = (double)(mem_event_ts - process_start_timestamp) / (double)process_total_runtime;
         _memory_events[i].animation_timestamp = progress * animation_duration;
     }
+
+    if (_num_memory_events > 0) {
+        _memory_events[0].animation_timestamp = 1;
+    }
 }
 
 void graphics_init(memory_event* memory_events, size_t num_memory_events, memory_event_bounds* bounds) {
@@ -254,10 +258,14 @@ static void _render_memory_events() {
 
         memory_event* memory_event = &_memory_events[_memory_event_render_list[i]];
         uintptr_t relative_address = (uintptr_t)memory_event->address - (uintptr_t)_memory_events_bounds->min_address;
-        int row = relative_address / _grid_size;
-        int column = relative_address % _grid_size;
 
-        _render_block(row, column);
+        for (int i = 0; i < memory_event->size; i++) {
+            uintptr_t address = relative_address + i;
+            int row = address / _grid_size;
+            int column = address % _grid_size;
+            _render_block(row, column);
+        }
+        
     }
 }
 
