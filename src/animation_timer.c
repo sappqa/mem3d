@@ -42,6 +42,8 @@ void animation_timer_reset() {
 }
 
 uint32_t animation_timer_get_elapsed_time_ms() {
+    if (_animation_start_time_ms == 0) return 0;
+    
     uint64_t current_time = _get_current_realtime_ms();
     return current_time - _animation_start_time_ms;
 }

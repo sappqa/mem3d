@@ -5,7 +5,7 @@
 static float _azimuth = 0.0f;
 static float _altitude = (M_PI / 2.0f) - 0.01f;
 static mat4x4 _view;
-static float _distance = 40.0f;
+static float _distance = 110.0f;
 
 
 static void _update_view() {
@@ -26,7 +26,7 @@ void orbit_camera_init() {
 
 void orbit_camera_get_projection(mat4x4 proj) {
     mat4x4 perspective;
-    mat4x4_perspective(perspective, RADIANS(45.0f), RENDER_WINDOW_ASPECT, 0.01f, 100.0f);
+    mat4x4_perspective(perspective, RADIANS(45.0f), RENDER_WINDOW_ASPECT, 0.01f, 10000.0f);
     mat4x4_mul(proj, perspective, _view);
 }
 
@@ -36,8 +36,7 @@ float orbit_camera_get_distance() {
 
 void orbit_camera_set_distance(float distance) {
     _distance = distance;
-    // vec3_sub(_position_offset, _target, _position);
-    // vec3_scale(_position_offset, _position_offset, zoom);
+    _update_view();
 }
 
 void orbit_camera_rotate(float dx, float dy) {
