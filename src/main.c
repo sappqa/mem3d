@@ -36,13 +36,12 @@ int main(int argc, char** argv) {
         char buf[ALLOC_DESCRIPTOR_STRLEN];
         ssize_t bytes_read;
 
-        memory_event memory_events[16];
+        int num_memory_events = EX_LINKED_LISTS_ALLOC_COUNT * 2; // hard coded for now from ex_linked_lists
+        memory_event memory_events[num_memory_events];
         memory_event_bounds bounds = memory_event_bounds_min_max_init;
         struct timespec last_timestamp;
         int i = 0;
         while ((bytes_read = read(pipe_fd[0], buf, sizeof(buf))) > 0) {
-            // write(STDOUT_FILENO, buf, bytes_read);
-            // memory_event* event = (memory_event*)malloc(sizeof(memory_event));
             parse_memory_event(buf, bytes_read, &memory_events[i]);
 
             if (i == 0) bounds.start_timestamp = memory_events[i].timestamp;
@@ -50,22 +49,15 @@ int main(int argc, char** argv) {
             if (memory_events[i].address > bounds.max_address) bounds.max_address = memory_events[i].address;
             last_timestamp = memory_events[i].timestamp;
             i++;
-            // printf("alloc type: %c\n", event->alloc);
-            // printf("alloc address: %p\n", event->address);
-            // printf("alloc timestamp: %ld.%ld\n", event->timestamp.tv_sec, event->timestamp.tv_nsec);
-            // printf("alloc size: %zu\n", event->size);
-            // free(event);
         }
-
-        // printf("min address %p\n", bounds.min_address);
-        // printf("max address %p\n", bounds.max_address);
-
+        
+        bounds.end_timestamp = last_timestamp;
         close(pipe_fd[0]);
 
         int status;
         waitpid(pid, &status, 0);
 
-        render_window();
+        render_window(memory_events, num_memory_events, &bounds);
     }
 
     exit(0);

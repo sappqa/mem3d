@@ -7,6 +7,7 @@ typedef struct _memory_event {
     char alloc;
     void* address;
     struct timespec timestamp;
+    uint32_t animation_timestamp;
     size_t size;
 } memory_event;
 
@@ -18,7 +19,8 @@ typedef struct _memory_event_bounds {
 } memory_event_bounds;
 
 static const memory_event_bounds memory_event_bounds_min_max_init = {
-    (void*)(uintptr_t)(~0ULL), (void*)(uintptr_t)0
+    (void*)(uintptr_t)(~0ULL), // bitwise not of 0 as unsigned long long, ie ull max value
+    (void*)(uintptr_t)0
 };
 
 void parse_memory_event(char* const event_str, size_t len, memory_event* event);

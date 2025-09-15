@@ -4,6 +4,7 @@
 #include "GLFW/glfw3.h"
 #include "render_graphics.h"
 #include "mouse_input_handler.h"
+#include "animation_timer.h"
 #include <stdio.h>
 
 
@@ -51,15 +52,23 @@ static GLFWwindow* _glfw_window_init() {
     return window;
 }
 
-int render_window() {
+int render_window(memory_event* memory_events, size_t num_memory_events, memory_event_bounds* bounds) {
     GLFWwindow* window = _glfw_window_init();
-    graphics_init();
+
+    animation_timer_set_startup_delay(1);
+    animation_timer_set_animation_duration_ms(8 * 1000);
+    
+    graphics_init(memory_events, num_memory_events, bounds);
+
+    animation_timer_start();
 
     while(!glfwWindowShouldClose(window)) {
         render_graphics();
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    animation_timer_stop();
 
     glfwTerminate();
     return 0;

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "common.h"
 
 #define D if (0)
 
@@ -47,7 +48,7 @@ void ll_dealloc(ll_node* ll_head) {
 }
 
 int main() {
-    ll_node* list = ll_alloc(8);
+    ll_node* list = ll_alloc(EX_LINKED_LISTS_ALLOC_COUNT);
     ll_print(list);
     ll_dealloc(list);
     list = NULL;
