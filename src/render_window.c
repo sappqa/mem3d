@@ -69,6 +69,7 @@ int render_window(memory_event* memory_events, size_t num_memory_events, memory_
     }
 
     animation_timer_stop();
+    render_graphics_dispose();
 
     glfwTerminate();
     return 0;

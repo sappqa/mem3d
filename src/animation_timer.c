@@ -8,7 +8,7 @@ static uint64_t _animation_stop_time_ms = 0;
 // static uint64_t _current_time_ms = 0;
 
 void animation_timer_set_startup_delay(int seconds) {
-
+    
 }
 
 void animation_timer_set_animation_duration_ms(uint32_t ms) {
