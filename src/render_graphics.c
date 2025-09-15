@@ -211,8 +211,10 @@ static void _update_memory_event_render_list() {
     if (current_memory_event->animation_timestamp <= elapsed_time) {
         if (current_memory_event->alloc == 'A') {
             _memory_event_render_list[_memory_event_render_list_current_count++] = _current_memory_event_index;
+            printf("alloc\n");
         }
         else if (current_memory_event->alloc == 'F') {
+            printf("free\n");
             // find the corresponding alloc
             // TODO: optimize
             for (int i = 0; i < _memory_event_render_list_current_count; i++) {
@@ -227,13 +229,13 @@ static void _update_memory_event_render_list() {
     }
 }
 
-// Assume 0,0 is bottom left of grid
-static void _render_block(int row, int column) {
+static void _render_block(const int row, const int column) {
+    if (row < 0 || row >= _grid_size || column < 0 || column >= _grid_size) return;
 
     mat4x4 proj, translation, final;
     orbit_camera_get_projection(proj);
-    mat4x4_translate(translation, -0.5, -0.5, 0);
-    // mat4x4_identity(translation);
+    mat4x4_translate(translation, row - _grid_size / 2 - 0.5f, column - _grid_size / 2 - 0.5f, 0);
+
     mat4x4_mul(final, proj, translation);
     glUniformMatrix4fv(_u_proj_location, 1, 0, (GLfloat*)final);
 
@@ -241,7 +243,6 @@ static void _render_block(int row, int column) {
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
     glBindVertexArray(0);
-    glUseProgram(0);
 }
 
 static void _render_memory_events() {
@@ -256,19 +257,20 @@ static void _render_memory_events() {
         int row = relative_address / _grid_size;
         int column = relative_address % _grid_size;
 
-        
-
-        // map address to grid row column, then fill in blocks based on size
-
+        _render_block(row, column);
     }
 }
 
 static void _render_grid() {
-
+    
+    mat4x4 proj;
+    orbit_camera_get_projection(proj);
+    glUniformMatrix4fv(_u_proj_location, 1, 0, (GLfloat*)proj);
 
     glBindVertexArray(_vao_grid);
-    glDrawArrays(GL_LINES, 0, (_grid_size + 1) * 2 * 2 + 2 - 2);
+    glDrawArrays(GL_LINES, 0, (_grid_size + 1) * 2 * 2 + 2 - 5);
 
+    glBindVertexArray(0);
 
 }
 
@@ -286,16 +288,10 @@ void render_graphics() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(_simple_shaders);
-    mat4x4 proj;
-    orbit_camera_get_projection(proj);
-    glUniformMatrix4fv(_u_proj_location, 1, 0, (GLfloat*)proj);
-
     
     _render_grid();
-    _render_block(0, 0);
-    // _render_memory_events();
+    _render_memory_events();
 
-    glBindVertexArray(0);
     glUseProgram(0);
 
 }
