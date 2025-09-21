@@ -1,5 +1,7 @@
 # mem3d
 
+![](demo.gif)
+
 mem3d is a 3D visualization tool for memory allocation patterns.
 
 mem3d runs a target program as a child process and uses a LD_PRELOAD hook to intercept the child process malloc and free calls, recording their timestamps, size, and addresses. These events are then interpolated across an animation timeline and rendered as an animated 3D grid, where each cell represents a single byte of memory.
