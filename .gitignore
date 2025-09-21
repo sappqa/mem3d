@@ -5,3 +5,4 @@
 *.so
 *a.out
 .vscode
+!license
