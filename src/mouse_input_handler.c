@@ -62,5 +62,6 @@ void handle_mouse_move_input(GLFWwindow* window, double xpos, double ypos) {
 }
 
 void handle_mouse_scroll_input(GLFWwindow* window, double xoffset, double yoffset) {
-    orbit_camera_set_distance(orbit_camera_get_distance() - yoffset);
+    float sign = (yoffset >= 0) ? 1.0f : -1.0f;
+    orbit_camera_set_distance(orbit_camera_get_distance() +  orbit_camera_get_distance() * -sign * 0.1f);
 }

@@ -1,5 +1,3 @@
-- camera init distance needs to scale with grid size
-- zoom ammount needs to scale with grid size
 - debug grid drawing issues with different grid_size.
 - keyboard controls/animation controls - start stop, reset scrub. needs to interface nicely with the live render list...
 - better file/folder structure and graphics logic encapsulation

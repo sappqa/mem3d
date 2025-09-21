@@ -5,7 +5,7 @@
 static float _azimuth = 0.0f;
 static float _altitude = (M_PI / 2.0f) - 0.01f;
 static mat4x4 _view;
-static float _distance = 110.0f;
+static float _distance = 20.0f;
 
 
 static void _update_view() {

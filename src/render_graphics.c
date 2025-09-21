@@ -85,6 +85,7 @@ static void _vertices_init() {
     printf("address range: %lu\n", address_range);
     printf("grid size: %d\n", _grid_size);
 
+    orbit_camera_set_distance((float)_grid_size * 1.6f);
 
     float grid_vertices[(_grid_size + 1) * 2 * 6];
     float grid_colors[(_grid_size + 1) * 2 * 8];
