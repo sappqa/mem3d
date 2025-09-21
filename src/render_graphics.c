@@ -282,12 +282,6 @@ static void _render_grid() {
 
 }
 
-/*
-for now, have global animation frame number. to restart the animation, set the frame number back to 0
-given the frame number, and the current memory event's real-time interpolated timestamp, if frame == event.timestamp, if alloc, add to render list. if free, remove from render list
-
-then render the render list
-*/
 void render_graphics() {
     glEnable(GL_DEPTH_TEST);
     glClear(GL_DEPTH_BUFFER_BIT);
